@@ -13,4 +13,11 @@
 	<version>1.0-SNAPSHOT</version>
 	<name>plm-cloud-admin-service</name>
 	<description>admin service project</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.fuwu</groupId>
+			<artifactId>plm-cloud-shared</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>
