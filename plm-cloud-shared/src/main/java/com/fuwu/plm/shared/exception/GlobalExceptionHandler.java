@@ -21,20 +21,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		System.out.println("==========================");
 		List<FieldValidationError> errors=new ArrayList<>();
 		for(FieldError error:ex.getBindingResult().getFieldErrors()) {
 			FieldValidationError validationError = new FieldValidationError(error.getField(),error.getDefaultMessage());
 			errors.add(validationError);
 		}
-		ApiError<FieldValidationError> apiError=new ApiError<>(HttpStatus.BAD_REQUEST, "validation failed", errors);
-		return handleExceptionInternal(ex, apiError, headers, apiError.getStatus(), request);
+		FailureResponse<FieldValidationError> failureResponse=new FailureResponse<>();
+		failureResponse.setMessage("验证错误!");
+		failureResponse.setErrors(errors);
+		return handleExceptionInternal(ex, failureResponse, headers, HttpStatus.BAD_REQUEST, request);
 				
 	}
 	
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<FailureResponse> handleOthers(){
-		System.out.println("handleOthers");
 		FailureResponse failureResponse=new FailureResponse<>();
 		failureResponse.setMessage("系统错误,请联系系统管理员!");
 		ResponseEntity responseEntity=new ResponseEntity<>(failureResponse, HttpStatus.INTERNAL_SERVER_ERROR);
